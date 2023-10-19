@@ -11,20 +11,38 @@ board = [
     "....##############....",
 ]
 
+board2 = [
+    "......##########......",
+    "......#........#......",
+    "......#........#......",
+    "......#........#......",
+    "......#........#####..",
+    "....###............#..",
+    "....#............###..",
+    "....##############....",
+]
+
+from typing import List
+
 def flood_fill(input_board: List[str], old: str, new: str, x: int, y: int) -> List[str]:
-    def dfs(x, y):
-        if x < 0 or x >= len(input_board) or y < 0 or y >= len(input_board[0]) or input_board[x][y] != old:
-            return
-        input_board[x] = input_board[x][:y] + new + input_board[x][y + 1:]
-        dfs(x - 1, y)
-        dfs(x + 1, y)
-        dfs(x, y - 1)
-        dfs(x, y + 1)
+    board = input_board.copy()  
+    stack = [(x, y)]
 
-    dfs(x, y)
-    return input_board
+    while stack:
+        x, y = stack.pop()
+        if x < 0 or x >= len(board[0]) or y < 0 or y >= len(board) or board[y][x] != old:
+            continue
+        board[y] = board[y][:x] + new + board[y][x + 1:]
+        stack.extend([(x-1, y), (x+1, y), (x, y-1), (x, y+1)])
 
-modified_board = flood_fill(input_board=board, old=".", new="~", x=5, y=12)
+    return board
+
+
+modified_board = flood_fill(input_board=board, old=".", new="~", x=7, y=2)
+modified_board2 = flood_fill(input_board=board2, old=".", new="~", x=8, y=1)
 
 for a in modified_board:
+    print(a)
+
+for a in modified_board2:
     print(a)
